@@ -10,3 +10,20 @@ const app = express();
 //Express Middleware
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
+
+//Create connection to the database
+
+
+//Default response for any other request NOT found
+
+app.use ((req, res) => {
+  res.status(404).end();
+
+});
+
+
+
+app.listen(PORT, () => {
+console.log(`Server listening on port ${PORT}`);
+
+});
