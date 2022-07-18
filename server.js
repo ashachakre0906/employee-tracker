@@ -1,10 +1,14 @@
+//Required dependencies
 const inquirer = require('inquirer');
-const express = require ('exprerss');
+const express = require ('express');
 const cTable = require('console.table');
+
 //Import and require mysql2
 const mysql = require ('mysql2');
 
 const PORT = process.env.PORT || 3001;
+
+//Creating an app by invoking express function
 const app = express();
 
 //Express Middleware
