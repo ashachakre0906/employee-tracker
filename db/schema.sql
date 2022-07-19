@@ -26,5 +26,5 @@ CREATE TABLE employee (
     FOREIGN KEY (manager_id)
     REFERENCES employee(id),
     FOREIGN KEY (role_id)
-    REFERENCES role(id)
+    REFERENCES role (id)
 );
