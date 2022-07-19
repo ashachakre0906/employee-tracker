@@ -16,7 +16,17 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 //Create connection to the database
-
+const db = mysql.createConnection(
+{
+  host: 'localhost',
+  // MySQL Username
+  user: 'root',
+  //MySQL Password
+  password: 'password',
+  database: 'books_db'
+},
+console.log(`Connected to the employee_db database.`)
+)
 
 //Default response for any other request NOT found
 
@@ -24,8 +34,6 @@ app.use ((req, res) => {
   res.status(404).end();
 
 });
-
-
 
 app.listen(PORT, () => {
 console.log(`Server listening on port ${PORT}`);
