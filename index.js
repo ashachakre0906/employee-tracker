@@ -3,6 +3,7 @@ const mysql = require ('mysql2');
 const cTable = require('console.table');
 const figlet = require ('figlet');//This method allows you to create ASCII Art from text.
 // const Choices = require("inquirer/lib/objects/choices");
+
 //function to create ASCII Art from text
 figlet('Employee Manager', function(err, data) {
     if (err) {
@@ -51,20 +52,21 @@ const db = mysql.createConnection(
     },
     console.log(`Welcome you are connected to the employee_db database!`)
 );
+ 
 function viewDepartments (){
     db.query('SELECT * FROM department', function(err,results ){
-       console.log(results) ;
+       console.table(results);
     });
     
 }
 function viewRoles (){
     db.query('SELECT * FROM roles ', function(err, results){
-        console.log(results);
+        console.table(results);
     });
 }
 function viewEmployees(){
     db.query('SELECT * FROM employees', function(err, results){
-        console.log(results);
+        console.table(results);
     });
 }
 
