@@ -9,7 +9,7 @@ VALUES ('Engineering'),
        ('Admin');
 
 
-INSERT INTO role (title, salary, department_id)
+INSERT INTO roles (title, salary, department_id)
 VALUES ('Software Engineer', 100000, 1),
        ('QA Engineer', 8000, 1),
        ('Engineering Manager',225000,1),
