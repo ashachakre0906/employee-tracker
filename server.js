@@ -29,14 +29,6 @@ app.use(express.json());
 // console.log(`Connected to the employee_db database.`)
 // )
 
-figlet('Employee Manager', function(err, data) {
-  if (err) {
-      console.log('Something went wrong...');
-      console.dir(err);
-      return;
-  }
-  console.log(data)
-});
 //Default response for any other request NOT found
 
 app.use ((req, res) => {
