@@ -9,6 +9,10 @@ SELECT * FROM employees;
 -- USE employee_db;
 -- ALTER TABLE employee RENAME TO employees;
 
+-- query for roles-
+
+SELECT department.name,roles.title,
+
 
 
 

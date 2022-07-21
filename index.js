@@ -35,6 +35,7 @@ function init (){
     case 'View all employees':
         viewEmployees();
      break;
+     case 'Add a department'
    }
 
   });
