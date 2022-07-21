@@ -7,7 +7,7 @@ VALUES ('Engineering'),
        ('Sales'),
        ('Finance'),
        ('Admin');
- 
+
 
 INSERT INTO role (title, salary, department_id)
 VALUES ('Software Engineer', 100000, 1),
