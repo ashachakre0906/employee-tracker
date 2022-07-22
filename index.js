@@ -5,14 +5,15 @@ const figlet = require ('figlet');//This method allows you to create ASCII Art f
 
 
 //function to create ASCII Art from text
-const show = () => new Promise((resolve, reject) => {
+const show = () => {
   figlet('Employee Manager', (err, data) => {
-   if (err) {
-    return reject(err);
-   }
-   return resolve(data);
-  });
-});
+    if (err) {
+     console.log (error);
+    }
+    console.log (data);
+   });
+   init();
+}
 
   const db = mysql.createConnection(
     {
@@ -27,7 +28,7 @@ const show = () => new Promise((resolve, reject) => {
 );
 //Create function init which will initialize the prompt
 function init (){
-    show();
+    // show();
     inquirer.prompt({
 
    type :'list',
@@ -68,7 +69,8 @@ function init (){
   });
 
 }
-init();
+// init();
+show();
  
 function viewDepartments (){
     db.query('SELECT * FROM department', function(err,results ){
