@@ -34,31 +34,31 @@ function init (){
    type :'list',
    name: 'options',
    message:'Which option would you like to choose ?',
-   choices: ['View all departments','View all roles','View all employees', 'Add a department',
-   'Add a role','Add an employee','Update an employee role']
+   choices: ['View All Departments','View All Roles','View All Employees', 'Add A Department',
+   'Add A Role','Add An Employee','Update An Employee role']
     })
   .then ((answer) => {
    console.log(answer);
    switch (answer.options) {
-    case 'View all departments':
+    case 'View All Departments':
       viewDepartments();
       break;
-    case 'View all roles':
-        viewRoles();
+    case 'View All Roles':
+      viewRoles();
      break;
-    case 'View all employees':
+    case 'View All Employees':
         viewEmployees();
      break;
-    case 'Add a department':
+    case 'Add A Department':
       addDepartment();
       break;
-    case 'Add a role':
+    case 'Add A Role':
       addRole();
       break;
-    case 'Add an employee':
+    case 'Add An Employee':
       addEmployee();
       break;
-    case 'Update an employee':
+    case 'Update An Employee Role':
       updateEmployee();
       break;
     case 'Exit application':
@@ -73,27 +73,27 @@ function init (){
 show();
  
 function viewDepartments (){
-    db.query('SELECT * FROM department', function(err,results ){
+    db.query(`SELECT * FROM department`, function(err,results ){
        console.table(results);
        init();
     });
     
 }
 function viewRoles (){
-    db.query('SELECT department.name,roles.title AS job_title, roles.id,roles.salary FROM roles INNER JOIN department ON roles.department_id = department.id', function(err, results){
+    db.query(`SELECT roles.id, roles.title AS title, department.name AS department,roles.salary FROM roles INNER JOIN department ON roles.department_id = department.id;`, function(err, results){
         console.table(results);
         init();
     });
   }
 
 function viewEmployees(){
-    db.query(`SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name AS department, 
+    db.query(`SELECT employees.id, employees.first_name, employees.last_name, roles.title, department.name AS department, 
     roles.salary, 
-    CONCAT(manager.first_name, ' ', manager.last_name) AS manager 
+    CONCAT(manager.first_name, ' ', manager.last_name) AS Manager 
     FROM employees 
-    LEFT JOIN role on employee.role_id = role.id 
-    LEFT JOIN department on role.department_id = department.id 
-    LEFT JOIN employee manager on manager.id = employee.manager_id;`, function(err, results){
+    LEFT JOIN roles on employees.role_id = roles.id 
+    LEFT JOIN department on roles.department_id = department.id 
+    LEFT JOIN employees manager on manager.id = employees.manager_id;`, function(err, results){
     console.table(results);
         init();
     });
@@ -113,7 +113,6 @@ function addDepartment(){
     });
 
 }
-
 function addRole (){
   inquirer.prompt([
   {
