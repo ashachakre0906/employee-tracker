@@ -19,6 +19,7 @@ const db = mysql.createConnection(
     host: "localhost",
     // MySQL Username
     user: "root",
+    port: 3306,
     //MySQL Password
     password: "password",
     database: "employee_db",
@@ -143,29 +144,42 @@ function addDepartment() {
     });
 }
 function addRole() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "title",
-        message: "What is the name of the role ?",
-      },
-      {
-        type: "input",
-        name: "salary",
-        message: "What is the salary of the role ?",
-      }
-      ,
-      {
-        type: "list",
-        name: "role",
-        message: "Which department does the role belongs to ?",
-        choices: ['Engineering','Quality Assurance','Design','HR','Sales','Finance','Admin']
-      }
-    ])
+  const departmentArray = [];
+  db.query ('SELECT department.id, department.name AS Department FROM department', 
+  function (err, results, fields)
+  {
+    results.forEach (function(i)
+    {
+      departmentArray.push(i.Department)
+    })
+    console.log(departmentArray);
+    role();
+  });  
+  function role()
+  {
+    inquirer
+  .prompt([
+    {
+      type: "input",
+      name: "title",
+      message: "What is the name of the role ?",
+    },
+    {
+      type: "input",
+      name: "salary",
+      message: "What is the salary of the role ?",
+    }
+    ,
+    {
+      type: "list",
+      name: "role",
+      message: "Which department does the role belongs to ?",
+      choices: departmentArray
+    }
+  ])
 
     .then((answer) => {
-      db.query(`INSERT INTO roles SET ?`,
+      db.query(`INSERT INTO rolxes (title , salary, department_id) VALUES(?, ?, ?)`,
       {
         title : answer.title,
         salary : answer.salary,
@@ -184,8 +198,9 @@ function addRole() {
         }
       );
     });
-  
-}
+  }
+  }
+
 //function to add an employee to the database
 function addEmployee (){
   inquirer.prompt([
