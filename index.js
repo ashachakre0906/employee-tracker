@@ -135,7 +135,7 @@ function addDepartment() {
           if (err) {
             console.log(err);
           }
-          // console.table(results);
+          console.table(results);
           console.log(`Added ${answer.options} to the database`);
           init();
         }
@@ -147,7 +147,7 @@ function addRole() {
     .prompt([
       {
         type: "input",
-        name: "name",
+        name: "title",
         message: "What is the name of the role ?",
       },
       {
@@ -155,23 +155,68 @@ function addRole() {
         name: "salary",
         message: "What is the salary of the role ?",
       }
+      ,
+      {
+        type: "list",
+        name: "role",
+        message: "Which department does the role belongs to ?",
+        choices: ['Engineering','Quality Assurance','Design','HR','Sales','Finance','Admin']
+      }
     ])
 
     .then((answer) => {
-      db.query(`INSERT INTO roles (name)
-      VALUES ${answer.name},
-             ${answer.salary}`),
+      db.query(`INSERT INTO roles SET ?`,
+      {
+        title : answer.title,
+        salary : answer.salary,
+        role: answer.role,
+        
+      },
         function (err, results) {
           if (err) {
             console.log(err);
           }
           console.table(results);
           console.log(
-            `Added ${answer.name},${answer.salary},${answer.department} to the database`
+            `Added ${answer.title},${answer.salary},${answer.role} to the database`
           );
           init();
-        };
+        }
+      );
     });
+  
+}
+//function to add an employee to the database
+function addEmployee (){
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "first name",
+      message: "Please enter employee's first name?"
+    }
+    ,
+    {
+      type: "input",
+      name: "last name",
+      message: "Please enter employee's last name?"
+    }
+    ,
+    {
+      type: "list",
+      name: "role",
+      message: "Please choose employee's role?",
+      choices: ["Software Engineer",'Engineering Manager','QA Engineer','QA Manager','UI/UX Designer','Interior Designer','HR Director',
+      'HR Lead','Sales Specialist','Sales Rep','Financial advisor','Financial Manager','Systems Administrator','Administrative Manager'
+    ]
+    }
+    ,
+    {
+      type: "list",
+      name: "employees manager",
+      message: "Who is the employee's manager?",
+    }
+     
+  ])
 }
 
 
