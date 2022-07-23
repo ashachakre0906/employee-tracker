@@ -115,8 +115,8 @@ function addDepartment(){
 }
 
 function addRole (){
-  inquirer.prompt([{
-
+  inquirer.prompt([
+  {
    type :'input',
    name: 'name',
    message:'What is the name of the role ?',
@@ -131,16 +131,17 @@ function addRole (){
     type :'input',
     name: 'department',
     message:'What is your department ?'
-  },
+  }
 ]
-  
+
     ).then ((answer) => {
-      db.query (`INSERT INTO roles (name)VALUES
-      ${answer.name},
-      ${answer.salary},
-      ${answer.department}`)
+      db.query (`INSERT INTO roles (name)
+      VALUES ${answer.name},
+             ${answer.salary},
+             ${answer.department}`)   
 
     });
+  }
 
 
 
@@ -156,5 +157,3 @@ function addRole (){
 //function view all employees
 //function to add a department
 //
-
-
