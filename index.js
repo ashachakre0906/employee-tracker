@@ -87,11 +87,66 @@ function viewRoles (){
   }
 
 function viewEmployees(){
-    db.query('SELECT * FROM employees', function(err, results){
-        console.table(results);
+    db.query(`SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name AS department, 
+    roles.salary, 
+    CONCAT(manager.first_name, ' ', manager.last_name) AS manager 
+    FROM employees 
+    LEFT JOIN role on employee.role_id = role.id 
+    LEFT JOIN department on role.department_id = department.id 
+    LEFT JOIN employee manager on manager.id = employee.manager_id;`, function(err, results){
+    console.table(results);
         init();
     });
 }
+
+
+function addDepartment(){
+  inquirer.prompt({
+
+    type :'input',
+   name: 'options',
+   message:'What is the name of the department ?',
+
+    }).then ((answer) => {
+      db.query (`INSERT INTO department (name)VALUES${answer.options}`)
+
+    });
+
+}
+
+function addRole (){
+  inquirer.prompt([{
+
+   type :'input',
+   name: 'name',
+   message:'What is the name of the role ?',
+  },
+  {
+    type :'input',
+    name: 'salary',
+    message:'What is your salary ?'
+  }
+  ,
+  {
+    type :'input',
+    name: 'department',
+    message:'What is your department ?'
+  },
+]
+  
+    ).then ((answer) => {
+      db.query (`INSERT INTO roles (name)VALUES
+      ${answer.name},
+      ${answer.salary},
+      ${answer.department}`)
+
+    });
+
+
+
+
+
+
 
 
 // viewDepartments();
@@ -101,3 +156,5 @@ function viewEmployees(){
 //function view all employees
 //function to add a department
 //
+
+
