@@ -183,7 +183,7 @@ function addRole() {
   ])
 
     .then((answer) => {
-      db.query(`INSERT INTO employee_db.roles SET ?";`,    
+      db.query(`INSERT INTO employee_db.roles (title ,salary,department_id) VALUES (? , ? , ?) ;`,[answer.title, answer.salary,answer.department_id],    
         function (err, results) {
           if (err) {
             console.log(err);
@@ -234,7 +234,7 @@ function addEmployee (){
 //Function to select role
 let roleArr = [];
 function selectRole(){
-  db.query("SELECT * FROM roles", function(err , results) {
+  db.query(`SELECT * FROM roles`, function(err , results) {
     if (err) {
       console.log(err);
     }
@@ -246,5 +246,14 @@ function selectRole(){
 
   })
   return roleArr;
+}
+
+//function to select manager()
+
+let managerArray = [];
+function selectmanager(){
+  db.query(`SELECT * FROM employees WHERE manager_id = NULL`)
+
+
 }
 
