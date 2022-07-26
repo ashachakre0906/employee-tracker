@@ -208,13 +208,13 @@ function addEmployee (){
   inquirer.prompt([
     {
       type: "input",
-      name: "first name",
+      name: "firstname",
       message: "Please enter employee's first name?"
     }
     ,
     {
       type: "input",
-      name: "last name",
+      name: "lastname",
       message: "Please enter employee's last name?"
     }
     ,
@@ -222,18 +222,32 @@ function addEmployee (){
       type: "list",
       name: "role",
       message: "Please choose employee's role?",
-      choices: selectRole()
-    
+      choices: selectRole(),  
     }
     ,
     {
       type: "list",
-      name: "employees manager",
+      name: "managerlists",
       message: selectManager(),
     }
      
-  ])
-}
+  ]).then ((answers)  => {
+    db.query (`INSERT INTO employees SET ?`,
+    {
+      firstName: answers.firstname,
+      lastname: answers.lastname,
+      roleID: answers.role,
+      managerId: answers.managerlists
+    },
+    function(err , results){
+      if (err) {
+        console.log(error);
+      console.table(results);
+    }
+    init();
+  });
+});
+};
 
 //Function to select role
 let roleArr = [];
@@ -269,3 +283,4 @@ function selectManager(){
 
 };
 
+//function to update an employee
