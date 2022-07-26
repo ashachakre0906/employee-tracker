@@ -146,11 +146,15 @@ function addDepartment() {
 function addRole() {
   const departmentArray = [];
   db.query ('SELECT department.id, department.name AS Department FROM department', 
-  function (err, results, fields)
+  function (err, results)
   {
     results.forEach (function(i)
     {
-      departmentArray.push(i.Department)
+      const department = {
+        name : i.Department,
+        value: i.id
+      }
+      departmentArray.push(department);
     })
     console.log(departmentArray);
     role();
@@ -172,27 +176,21 @@ function addRole() {
     ,
     {
       type: "list",
-      name: "role",
+      name: "department",
       message: "Which department does the role belongs to ?",
       choices: departmentArray
     }
   ])
 
     .then((answer) => {
-      db.query(`INSERT INTO rolxes (title , salary, department_id) VALUES(?, ?, ?)`,
-      {
-        title : answer.title,
-        salary : answer.salary,
-        role: answer.role,
-        
-      },
+      db.query(`INSERT INTO employee_db.roles SET ?";`,    
         function (err, results) {
           if (err) {
             console.log(err);
           }
           console.table(results);
           console.log(
-            `Added ${answer.title},${answer.salary},${answer.role} to the database`
+            `Added ${answer.title},${answer.salary},${answer.department_id} to the database`
           );
           init();
         }
@@ -220,19 +218,33 @@ function addEmployee (){
       type: "list",
       name: "role",
       message: "Please choose employee's role?",
-      choices: ["Software Engineer",'Engineering Manager','QA Engineer','QA Manager','UI/UX Designer','Interior Designer','HR Director',
-      'HR Lead','Sales Specialist','Sales Rep','Financial advisor','Financial Manager','Systems Administrator','Administrative Manager'
-    ]
+      choices: selectRole()
+    
     }
     ,
     {
       type: "list",
       name: "employees manager",
-      message: "Who is the employee's manager?",
+      message: selectManager(),
     }
      
   ])
 }
 
+//Function to select role
+let roleArr = [];
+function selectRole(){
+  db.query("SELECT * FROM roles", function(err , results) {
+    if (err) {
+      console.log(err);
+    }
+    for (let i = 0; i < results.length; i++){
 
+    roleArr.push(results[i].title);
+
+    }
+
+  })
+  return roleArr;
+}
 
