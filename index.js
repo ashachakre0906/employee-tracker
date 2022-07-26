@@ -33,7 +33,7 @@ function init() {
     .prompt({
       type: "list",
       name: "options",
-      message: "Which option would you like to choose ?",
+      message: "Whatv would you like to do ?",
       choices: [
         "View All Departments",
         "View All Roles",
@@ -69,13 +69,17 @@ function init() {
           updateEmployee();
           break;
         case "Exit application":
-          connection.end();
+          quit ();
           break;
       }
     });
 }
 // init();
 show();
+function quit (){
+  connection.end();
+  process.exit();
+}
 
 function viewDepartments() {
   db.query(`SELECT * FROM department`, function (err, results) {
@@ -183,7 +187,7 @@ function addRole() {
   ])
 
     .then((answer) => {
-      db.query(`INSERT INTO employee_db.roles (title ,salary,department_id) VALUES (? , ? , ?) ;`,[answer.title, answer.salary,answer.department_id],    
+      db.query(`INSERT INTO employee_db.roles (title ,salary,department_id) VALUES (? , ? , ?)`,[answer.title, answer.salary,answer.department_id],    
         function (err, results) {
           if (err) {
             console.log(err);
@@ -251,9 +255,17 @@ function selectRole(){
 //function to select manager()
 
 let managerArray = [];
-function selectmanager(){
-  db.query(`SELECT * FROM employees WHERE manager_id = NULL`)
+function selectManager(){
+  db.query(`SELECT first_name, last_name AS manager from employees`, function(err , results){
+    if (err){
+      console.log(err);
+    }
+    for (let i = 0 ; i < results.length; i++){
+      managerArray.push(results[i].manager)
+    }
 
+  });
+  return managerArray;
 
-}
+};
 
