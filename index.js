@@ -24,7 +24,7 @@ const db = mysql.createConnection(
     password: "password",
     database: "employee_db",
   },
-  console.log(`Welcome you are connected to the employee_db database!`)
+  console.log(`   Welcome!!!!!! you are connected to the employee_db database!    `)
 );
 //Create function init which will initialize the prompt
 function init() {
@@ -33,7 +33,7 @@ function init() {
     .prompt({
       type: "list",
       name: "options",
-      message: "Whatv would you like to do ?",
+      message: "What would you like to do ?",
       choices: [
         "View All Departments",
         "View All Roles",
@@ -68,7 +68,12 @@ function init() {
         case "Update An Employee Role":
           updateEmployee();
           break;
-        case "Exit application":
+        case "Exit":
+          console.log("=================================");
+          console.log("");
+          console.log("Thank you for using the Employee Database");
+          console.log("");
+          console.log("=================================");
           quit ();
           break;
       }
@@ -180,13 +185,13 @@ function addRole() {
     ,
     {
       type: "list",
-      name: "department",
+      name: "department_id",
       message: "Which department does the role belongs to ?",
       choices: departmentArray
     }
   ])
-
     .then((answer) => {
+      console.log(answer.department_id);
       db.query(`INSERT INTO employee_db.roles (title ,salary,department_id) VALUES (? , ? , ?)`,[answer.title, answer.salary,answer.department_id],    
         function (err, results) {
           if (err) {
@@ -196,6 +201,7 @@ function addRole() {
           console.log(
             `Added ${answer.title},${answer.salary},${answer.department_id} to the database`
           );
+          
           init();
         }
       );
@@ -234,10 +240,10 @@ function addEmployee (){
   ]).then ((answers)  => {
     db.query (`INSERT INTO employees SET ?`,
     {
-      firstName: answers.firstname,
-      lastname: answers.lastname,
-      roleID: answers.role,
-      managerId: answers.managerlists
+      first_name: answers.firstname,
+      last_name: answers.lastname,
+      role_id: answers.role,
+      manager_id: answers.managerlists
     },
     function(err , results){
       if (err) {
