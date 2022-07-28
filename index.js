@@ -199,9 +199,8 @@ function addRole() {
           }
           console.table(results);
           console.log(
-            `Added ${answer.title},${answer.salary},${answer.department_id} to the database`
-          );
-          
+            `Successfully added ${answer.title},${answer.salary},${answer.department_id} to the database`
+          ); 
           init();
         }
       );
@@ -214,41 +213,36 @@ function addEmployee (){
   inquirer.prompt([
     {
       type: "input",
-      name: "firstname",
+      name: "first_name",
       message: "Please enter employee's first name?"
     }
     ,
     {
       type: "input",
-      name: "lastname",
+      name: "last_name",
       message: "Please enter employee's last name?"
     }
     ,
     {
       type: "list",
-      name: "role",
+      name: "role_id",
       message: "Please choose employee's role?",
       choices: selectRole(),  
     }
     ,
     {
       type: "list",
-      name: "managerlists",
+      name: "manager_id",
       message: selectManager(),
     }
      
   ]).then ((answers)  => {
-    db.query (`INSERT INTO employees SET ?`,
-    {
-      first_name: answers.firstname,
-      last_name: answers.lastname,
-      role_id: answers.role,
-      manager_id: answers.managerlists
-    },
+    db.query (`INSERT INTO employee_db.employees(first_name, last_name, role_id, manager_id) VALUES (?, ?, ?)`,[answers.first_name,answers.last_name,answers.role_id,answers.manager_id],
     function(err , results){
       if (err) {
         console.log(error);
       console.table(results);
+      console.log(`Successfully added new employee ${answers.first_name},${answers.last_name},${answers.role_id},${answers.manager_id} to the database`)
     }
     init();
   });
@@ -290,3 +284,40 @@ function selectManager(){
 };
 
 //function to update an employee
+
+function updateEmployee()
+{
+  inquirer.prompt([
+    {
+      name: 'first_name',
+      type: 'input',
+      message: 'Please enter employees first name which you want to update in the database'
+    },
+    {
+        name: 'last_name',
+        type: 'input',
+        message: 'Please enter employees last name which you want to update in the database'
+    },
+    {
+      name: 'role_id',
+      type: 'number',
+      message: 'Please enter the new role id associated with the employee'
+    }
+  ]).then ((answers) => {
+    db.query (`UPDATE employees SET role_id = ? WHERE first_name = ?`,[answers.first_name,answers.last_name,answers.role_id],
+    function (err , data){
+      if (err) throw err;
+      console.log('The new role entered has been successfully added to the database');
+      db.query (`SELECT * FROM employees`,( err , results) => {
+      if (err) {
+      console.log(err);
+      init();
+      }
+      console.table(results);
+      init();
+    });
+    });
+    
+
+  });
+}
