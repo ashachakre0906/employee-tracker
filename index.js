@@ -1,20 +1,11 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
-const cTable = require("console.table");
+const { printTable }  = require ('console-table-printer');
+// const cTable = require("console.table");//display data table in command line
 const figlet = require("figlet"); //This method allows you to create ASCII Art from text.
 
-//function to create ASCII Art from text
-const show = () => {
-  figlet("Employee Manager", (err, data) => {
-    if (err) {
-      console.log(error);
-    }
-    console.log(data);
-  });
-  init();
-};
-
 const db = mysql.createConnection(
+  
   {
     host: "localhost",
     // MySQL Username
@@ -24,13 +15,25 @@ const db = mysql.createConnection(
     password: "password",
     database: "employee_db",
   },
-  console.log(`   Welcome!!!!!! you are connected to the employee_db database!    `)
+  console.log(`Welcome!You are connected TO EMPLOYEE TRACKER database!`)
 );
+
+//Connect to the database
+db.connect((err) => {
+  if (err) throw err;
+  console.log(`connected as id ${db.threadId}\n`);
+  figlet('Employee Tracker',function ( err ,data){
+    if (err) {
+      console.log ('ASCII not loading !');
+    } else {
+      console.log(data);
+    }
+    init();
+  });
+});
 //Create function init which will initialize the prompt
 function init() {
-  // show();
-  inquirer
-    .prompt({
+  inquirer.prompt({
       type: "list",
       name: "options",
       message: "What would you like to do ?",
@@ -68,19 +71,22 @@ function init() {
         case "Update An Employee Role":
           updateEmployee();
           break;
-        case "Exit":
-          console.log("=================================");
-          console.log("");
-          console.log("Thank you for using the Employee Database");
-          console.log("");
-          console.log("=================================");
+        default:
           quit ();
-          break;
+          console.log("=================================");
+          console.log("");
+          console.log("Thank you for using Employee Tracker Database");
+          console.log("");
+          console.log("=================================");
       }
-    });
+    })
+  .catch(err => {
+    console.error(err);
+
+  });
 }
-// init();
-show();
+//quit function
+
 function quit (){
   connection.end();
   process.exit();
@@ -91,7 +97,7 @@ function viewDepartments() {
     if (err) {
       console.log(err);
     }
-    console.table(results);
+    printTable(results);
     init();
   });
 }
@@ -320,4 +326,15 @@ function updateEmployee()
     
 
   });
+}
+//Function to update employee's manager
+//function to Delete a role
+//Function to Delete an employee
+//Function to View the total untilized budget of a department
+
+//Function to Delete a Role
+
+function deleteRole () {
+
+
 }
