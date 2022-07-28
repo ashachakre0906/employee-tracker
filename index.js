@@ -68,7 +68,7 @@ function init() {
         case "Add An Employee":
           addEmployee();
           break;
-        case "Update An Employee Role":
+        case "Update Employee Role":
           updateEmployee();
           break;
         default:
@@ -297,25 +297,22 @@ function updateEmployee()
 {
   inquirer.prompt([
     {
-      name: 'first_name',
-      type: 'input',
-      message: 'Please enter employees first name which you want to update in the database'
+      name: 'getemployee',
+      type: 'list',
+      message: 'Which employee role you want to update ?',
+      choices: employeeArray()
     },
     {
-        name: 'last_name',
-        type: 'input',
-        message: 'Please enter employees last name which you want to update in the database'
-    },
-    {
-      name: 'role_id',
-      type: 'number',
-      message: 'Please enter the role id associated with the employee'
+      name: 'rolearray',
+      type: 'list',
+      message: 'Which role do you want to assign to the selected employee?',
+      choices: selectRole()
     }
   ]).then ((answers) => {
     db.query (`UPDATE employees SET role_id = ? WHERE first_name = ?`,[answers.first_name,answers.last_name,answers.role_id],
     function (err , results){
       if (err) throw err;
-      console.log('The new role entered has been successfully added to the database');
+      console.log('Updated employees role to the database');
       db.query (`SELECT * FROM employees`,( err , results) => {
       if (err) {
       console.log(err);
@@ -326,9 +323,32 @@ function updateEmployee()
     });
     });
     
-
   });
 }
+//Function to display list of employees
+function employeeArray(){
+  let employeeArr = [];
+  db.query(`SELECT first_name,last_name FROM employees` ,function(err , results){
+  if (err) {
+    console.log(err);
+  }
+  for(let i = 0; i < results.length; i++ )
+  employeeArr.push(results[i].first_name + " " + results[i].last_name)
+
+});
+return employeeArr;
+};
+
+
+
+
+
+
+
+
+
+
+
 //Function to update employee's manager
 //function to Delete a role
 //Function to Delete an employee
@@ -336,7 +356,5 @@ function updateEmployee()
 
 //Function to Delete a Role
 
-function deleteRole () {
+//function deleteRole () {
 
-
-}
