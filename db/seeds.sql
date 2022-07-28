@@ -25,7 +25,7 @@ VALUES ('Software Engineer', 100000, 1),
       ('Administrative Manager', 6000,7);
 
 
-INSERT INTO employees (first_name, last_name,role_id,manager_id)
+INSERT INTO employees (first_name,last_name,role_id,manager_id)
        VALUES
       ('Bob', 'Billy', 1, NULL),
       ('Andrew', 'Ray', 2, 1),

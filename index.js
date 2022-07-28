@@ -88,7 +88,7 @@ function init() {
 //quit function
 
 function quit (){
-  connection.end();
+  db.end();
   process.exit();
 }
 
@@ -205,7 +205,7 @@ function addRole() {
           }
           console.table(results);
           console.log(
-            `Successfully added ${answer.title},${answer.salary},${answer.department_id} to the database`
+            `New Role ${answer.title} is successfully added to the database`
           ); 
           init();
         }
@@ -239,21 +239,23 @@ function addEmployee (){
     {
       type: "list",
       name: "manager_id",
-      message: selectManager(),
+      message:"Who is employees manager?" ,
+      choices: selectManager(),
     }
      
   ]).then ((answers)  => {
-    db.query (`INSERT INTO employee_db.employees(first_name, last_name, role_id, manager_id) VALUES (?, ?, ?)`,[answers.first_name,answers.last_name,answers.role_id,answers.manager_id],
+    db.query (`INSERT INTO employee_db.employees(first_name,last_name,role_id,manager_id) VALUES (?, ?, ?, ?)`,[answers.first_name,answers.last_name,answers.role_id,answers.manager_id],
     function(err , results){
       if (err) {
-        console.log(error);
+        console.log(err);
+      }
       console.table(results);
-      console.log(`Successfully added new employee ${answers.first_name},${answers.last_name},${answers.role_id},${answers.manager_id} to the database`)
-    }
-    init();
+      console.log(`Successfully added new employee ${answers.first_name} ${answers.last_name} to the database`)
+      init();
   });
 });
 };
+
 
 //Function to select role
 let roleArr = [];
@@ -276,12 +278,12 @@ function selectRole(){
 
 let managerArray = [];
 function selectManager(){
-  db.query(`SELECT first_name, last_name AS manager from employees`, function(err , results){
+  db.query(`SELECT * FROM employees`, function(err , managerList){
     if (err){
       console.log(err);
     }
-    for (let i = 0 ; i < results.length; i++){
-      managerArray.push(results[i].manager)
+    for (let i = 0 ; i < managerList.length; i++){
+      managerArray.push(managerList[i].first_name + " " + managerList[i].last_name + managerList[i].role_id + managerList[i].manager_id)
     }
 
   });
@@ -307,11 +309,11 @@ function updateEmployee()
     {
       name: 'role_id',
       type: 'number',
-      message: 'Please enter the new role id associated with the employee'
+      message: 'Please enter the role id associated with the employee'
     }
   ]).then ((answers) => {
     db.query (`UPDATE employees SET role_id = ? WHERE first_name = ?`,[answers.first_name,answers.last_name,answers.role_id],
-    function (err , data){
+    function (err , results){
       if (err) throw err;
       console.log('The new role entered has been successfully added to the database');
       db.query (`SELECT * FROM employees`,( err , results) => {
