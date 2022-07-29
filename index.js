@@ -71,6 +71,15 @@ function init() {
         case "Update Employee Role":
           updateEmployee();
           break;
+        case "Delete a Department":
+          deleteDepartment();
+        break;
+          case "Delete a Role":
+            deleteRole();
+        break;
+        case "Delete an Employee":
+            deleteEmployee();
+          
         // default:
         //   quit ();
         //   console.log("=================================");
@@ -366,9 +375,49 @@ return employeeArr;
 
 
 //Function to update employee's manager
-//function to Delete a role
+//function to Delete a department
+const deleteDepartment = () => {
+  const department = [];
+  db.query (`SELECT * FROM DEPARTMENT`, (error , results) => {
+    if (error) throw err;
+    results.forEach(dept => {
+      let departments = {
+        name: dept.name,
+        value:dept.id
+      }
+      department.push(departments);
+    });
+    inquirer.prompt([
+    {
+      type: 'list',
+      name: 'id',
+      choices: department,
+      message: "Which department do you want to delete?"
+    }
+
+    ]).then (answers => {
+
+     db.query( `DELETE FROM DEPARTMENT WHERE ID = ?`[answers.id],function (err , results){
+
+      if (err) {
+        console.log(error);
+        init();
+      }
+      console.table(results);
+      init();
+
+     });
+
+    });
+  
+  });
+
+};
+
+
+
 //Function to Delete an employee
-//Function to Delete a department
+//Function to Delete a role
 //Function to View the total utilized budget of a department
 
 
