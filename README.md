@@ -1,10 +1,10 @@
 # employee-tracker
-Build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.We need to use the MySQL2 package to connect to your MySQL database and perform queries, the Inquirer package to interact with the user via the command line, and the console.table package to print MySQL rows to the console.
+Challenge is to build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.We need to use the MySQL2 package to connect to the MySQL database and perform queries, the Inquirer package to interact with the user via the command line, and the console.table package to print MySQL rows to the console.
 ## User Story
 ```
 AS A business owner
 I WANT to be able to view and manage the departments, roles, and employees in my company
-SO THAT I can organize and plan my business
+SO THAT I can organize and plan my business.
 ```
 ### Acceptance Criteria
 ```

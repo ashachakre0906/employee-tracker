@@ -68,7 +68,7 @@ function init() {
         case "Add An Employee":
           addEmployee();
           break;
-        case "Update Employee Role":
+        case "Update An Employee role":
           updateEmployee();
           break;
         case "Delete a Department":
@@ -255,8 +255,8 @@ function addEmployee (){
     }
      
   ]).then ((answers)  => {
-    let roleId = selectRole().indexOf(answers.role) + 1
-    let managerId = selectManager().indexOf(answers.manager) + 1
+    let roleId = answers.role;
+    let managerId = answers.manager;
     db.query (`INSERT INTO employee_db.employees SET ?`,
     {
       first_name: answers.first_name,
@@ -285,8 +285,11 @@ function selectRole(){
       console.log(err);
     }
     for (let i = 0; i < results.length; i++){
-
-    roleArr.push(results[i].title);
+     let data = {
+      name : results[i].title,
+      value : results [i].id
+     }
+    roleArr.push(data);
     // console.log(results[i].id);
 
     }
@@ -304,7 +307,11 @@ function selectManager(){
       console.log(err);
     }
     for (let i = 0 ; i < managerList.length; i++){
-      managerArray.push(managerList[i].first_name + " " + managerList[i].last_name)
+      let manager = {
+        name :managerList[i].first_name + " " + managerList[i].last_name,
+        value: managerList[i].id
+      }
+      managerArray.push(manager)
     }
 
   });
@@ -315,14 +322,14 @@ function selectManager(){
 //function to update an employee
 
 function updateEmployee(){
-db.query (`SELECT employees.first_name,employees.last_name,roles.title,roles.salary FROM employees
-  JOIN ROLES ON employees.role_id = roles.id`,function(err , results){
-    if (err) throw err
-    console.log(results);
+// db.query (`SELECT employees.first_name,employees.last_name,roles.title,roles.salary FROM employees
+//   JOIN ROLES ON employees.role_id = roles.id`,function(err , results){
+//     if (err) throw err
+//     console.log(results);
     inquirer.prompt([
     {
-      name: 'getemployee',
       type: 'list',
+      name: 'getemployee',
       message: 'Which employee role you want to update ?',
       choices: employeeArray()
     },
@@ -357,20 +364,26 @@ db.query (`SELECT employees.first_name,employees.last_name,roles.title,roles.sal
     });
     
   })
-})
 };
 //Function to display list of employees
+let employeeArr = [];
 function employeeArray(){
-  let employeeArr = [];
-  db.query(`SELECT first_name,last_name FROM employees` ,function(err , results){
+  db.query(`SELECT * FROM employees`, function(err , empresults){
+    console.log(results);
   if (err) {
     console.log(err);
   }
-  for(let i = 0; i < results.length; i++ )
-  employeeArr.push(results[i].first_name + " " + results[i].last_name)
+  for(let i = 0; i < empresults.length; i++ ){
+    let empl = {
+      name:empresults[i].first_name + " " + empresults[i].last_name,
+      value:empresults[i].id
+    }
 
+    employeeArr.push(empl)
+  }
+  return employeeArr;
 });
-return employeeArr;
+// console.log(employeeArr);
 };
 
 
