@@ -23,6 +23,7 @@ VALUES ('Software Engineer', 100000, 1),
 	('Financial Manager',8000, 6),
       ('Systems Administrator', 3000, 7),
       ('Administrative Manager', 6000,7);
+      
 
 
 INSERT INTO employees (first_name,last_name,role_id,manager_id)

@@ -18,7 +18,7 @@ const db = mysql.createConnection(
   console.log(`Welcome!You are connected TO EMPLOYEE TRACKER database!`)
 );
 
-//Connect to the database
+//Connection to the database
 db.connect((err) => {
   if (err) throw err;
   console.log(`connected as id ${db.threadId}\n`);
@@ -231,20 +231,29 @@ function addEmployee (){
     ,
     {
       type: "list",
-      name: "role_id",
+      name: "role",
       message: "Please choose employee's role?",
-      choices: selectRole(),  
+      choices: selectRole()
     }
     ,
     {
       type: "list",
-      name: "manager_id",
+      name: "manager",
       message:"Who is employees manager?" ,
       choices: selectManager(),
     }
      
   ]).then ((answers)  => {
-    db.query (`INSERT INTO employee_db.employees(first_name,last_name,role_id,manager_id) VALUES (?, ?, ?, ?)`,[answers.first_name,answers.last_name,answers.role_id,answers.manager_id],
+    let roleId = selectRole().indexOf(answers.role) + 1
+    let managerId = selectManager().indexOf(answers.manager) + 1
+    db.query (`INSERT INTO employee_db.employees SET ?`,
+    {
+      first_name: answers.first_name,
+      last_name: answers.last_name,
+      manager_id:managerId,
+      role_id:roleId
+
+    },
     function(err , results){
       if (err) {
         console.log(err);
@@ -267,6 +276,7 @@ function selectRole(){
     for (let i = 0; i < results.length; i++){
 
     roleArr.push(results[i].title);
+    // console.log(results[i].id);
 
     }
 
@@ -283,7 +293,7 @@ function selectManager(){
       console.log(err);
     }
     for (let i = 0 ; i < managerList.length; i++){
-      managerArray.push(managerList[i].first_name + " " + managerList[i].last_name + managerList[i].role_id + managerList[i].manager_id)
+      managerArray.push(managerList[i].first_name + " " + managerList[i].last_name)
     }
 
   });
@@ -352,9 +362,7 @@ return employeeArr;
 //Function to update employee's manager
 //function to Delete a role
 //Function to Delete an employee
-//Function to View the total untilized budget of a department
+//Function to View the total utilized budget of a department
 
-//Function to Delete a Role
 
-//function deleteRole () {
 
