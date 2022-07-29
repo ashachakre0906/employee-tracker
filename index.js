@@ -71,13 +71,13 @@ function init() {
         case "Update Employee Role":
           updateEmployee();
           break;
-        default:
-          quit ();
-          console.log("=================================");
-          console.log("");
-          console.log("Thank you for using Employee Tracker Database");
-          console.log("");
-          console.log("=================================");
+        // default:
+        //   quit ();
+        //   console.log("=================================");
+        //   console.log("");
+        //   console.log("Thank you for using Employee Tracker Database");
+        //   console.log("");
+        //   console.log("=================================");
       }
     })
   .catch(err => {
@@ -161,8 +161,10 @@ function addDepartment() {
 function addRole() {
   const departmentArray = [];
   db.query ('SELECT department.id, department.name AS Department FROM department', 
-  function (err, results)
-  {
+  function (err, results){
+    if (err){
+      console.log(err);
+    }    
     results.forEach (function(i)
     {
       const department = {
@@ -303,9 +305,12 @@ function selectManager(){
 
 //function to update an employee
 
-function updateEmployee()
-{
-  inquirer.prompt([
+function updateEmployee(){
+db.query (`SELECT employees.first_name,employees.last_name,roles.title,roles.salary FROM employees
+  JOIN ROLES ON employees.role_id = roles.id`,function(err , results){
+    if (err) throw err
+    console.log(results);
+    inquirer.prompt([
     {
       name: 'getemployee',
       type: 'list',
@@ -313,13 +318,22 @@ function updateEmployee()
       choices: employeeArray()
     },
     {
-      name: 'rolearray',
+      name: 'role',
       type: 'list',
       message: 'Which role do you want to assign to the selected employee?',
       choices: selectRole()
     }
   ]).then ((answers) => {
-    db.query (`UPDATE employees SET role_id = ? WHERE first_name = ?`,[answers.first_name,answers.last_name,answers.role_id],
+
+    let roleId = selectRole().indexOf(answers.role) + 1
+    db.query (`UPDATE employees SET WHERE ?`,
+    {
+      first_name:answers.getemployee
+    },
+    {
+      role_id: roleId
+    }
+    ,
     function (err , results){
       if (err) throw err;
       console.log('Updated employees role to the database');
@@ -333,8 +347,9 @@ function updateEmployee()
     });
     });
     
-  });
-}
+  })
+})
+};
 //Function to display list of employees
 function employeeArray(){
   let employeeArr = [];
@@ -350,18 +365,10 @@ return employeeArr;
 };
 
 
-
-
-
-
-
-
-
-
-
 //Function to update employee's manager
 //function to Delete a role
 //Function to Delete an employee
+//Function to Delete a department
 //Function to View the total utilized budget of a department
 
 
