@@ -3,9 +3,7 @@ const mysql = require("mysql2");
 const { printTable }  = require ('console-table-printer');
 // const cTable = require("console.table");//display data table in command line
 const figlet = require("figlet"); //This method allows you to create ASCII Art from text.
-
 const db = mysql.createConnection(
-  
   {
     host: "localhost",
     // MySQL Username
@@ -44,7 +42,10 @@ function init() {
         "Add A Role",
         "Add A Department",
         "Add An Employee",
-        "Update An Employee role",
+        "Update Employee Role",
+        "Delete a Department",
+        "Delete a Role",
+        "Delete an Employee"
       ],
     })
     .then((answer) => {
@@ -68,8 +69,8 @@ function init() {
         case "Add An Employee":
           addEmployee();
           break;
-        case "Update An Employee role":
-          updateEmployee();
+        case "Update Employee Role":
+          updateEmployeeRole();
           break;
         case "Delete a Department":
           deleteDepartment();
@@ -321,15 +322,11 @@ function selectManager(){
 
 //function to update an employee
 
-function updateEmployee(){
-// db.query (`SELECT employees.first_name,employees.last_name,roles.title,roles.salary FROM employees
-//   JOIN ROLES ON employees.role_id = roles.id`,function(err , results){
-//     if (err) throw err
-//     console.log(results);
+function updateEmployeeRole(){
     inquirer.prompt([
     {
       type: 'list',
-      name: 'getemployee',
+      name: 'id',
       message: 'Which employee role you want to update ?',
       choices: employeeArray()
     },
@@ -341,22 +338,26 @@ function updateEmployee(){
     }
   ]).then ((answers) => {
 
-    let roleId = selectRole().indexOf(answers.role) + 1
-    db.query (`UPDATE employees SET WHERE ?`,
+    let roleId = answers.role
+
+    db.query (`UPDATE employees SET first_name = ? WHERE role_id = ?`,
     {
-      first_name:answers.getemployee
+      id:answers.id
     },
     {
       role_id: roleId
     }
     ,
     function (err , results){
-      if (err) throw err;
+      if (err) {
+        console.log(err);
+      }  
+      console.table(results);
       console.log('Updated employees role to the database');
+      init();
       db.query (`SELECT * FROM employees`,( err , results) => {
       if (err) {
       console.log(err);
-      init();
       }
       console.table(results);
       init();
@@ -426,11 +427,71 @@ const deleteDepartment = () => {
   });
 
 };
+//Function to Delete a role
+const deleteRole = () => {
+  const removeRole = [];
+  db.query (`SELECT * FROM ROLE`,(error , results) => {
+    if (error) throw err;
+    results.forEach(dRole => {
+      let rRole = {
+        name: dRole.title,
+        value: dRole.id
+      }
+      removeRole.push(rRole);
+    });
+    inquirer.prompt([
+      {
+        type: 'list',
+        name: 'id',
+        choices: "Which role do you wnat to delete?"
+      }
 
+    ]).then (answers => {
 
+      db.query(`DELETE FROM ROLE WHERE ID = ?`[answers.id],function(err,results){
+
+        if (err) throw err;
+        console.log(`${answers.affected} rows successfully deleted!`);
+        init();
+      });
+
+    });
+  });
+};
 
 //Function to Delete an employee
-//Function to Delete a role
+const deleteEmployee = () => {
+  const removeEmployee = [];
+  db.query (`SELECT * FROM EMPLOYEES`,(error , results) => {
+    if (error) throw err;
+    results.forEach(({ first_name, last_name, id}) => {
+      removeEmployee.push({
+        name: first_name + "" + last_name,
+        value: id
+    });
+
+  });
+    inquirer.prompt([
+      {
+        type: 'list',
+        name: 'id',
+        choices: "Which employee do you wnat to delete?"
+      }
+
+    ]).then (answers => {
+
+      db.query(`DELETE FROM ROLE WHERE ID = ?`[answers.id],function(err,results){
+
+        if (err) throw err;
+        console.log(`${answers.affected} rows successfully deleted!`);
+        init();
+      });
+
+    });
+  });
+};
+
+
 //Function to View the total utilized budget of a department
 
 
