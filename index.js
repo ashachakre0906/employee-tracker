@@ -328,7 +328,7 @@ function updateEmployeeRole(){
       type: 'list',
       name: 'id',
       message: 'Which employee role you want to update ?',
-      choices: employeeArray()
+      choices: employeeArr
     },
     {
       name: 'role',
@@ -340,14 +340,7 @@ function updateEmployeeRole(){
 
     let roleId = answers.role
 
-    db.query (`UPDATE employees SET first_name = ? WHERE role_id = ?`,
-    {
-      id:answers.id
-    },
-    {
-      role_id: roleId
-    }
-    ,
+    db.query (`UPDATE employees SET role_id = ? WHERE id = ?`,[roleId,answers.id],
     function (err , results){
       if (err) {
         console.log(err);
@@ -367,51 +360,52 @@ function updateEmployeeRole(){
   })
 };
 //Function to display list of employees
-let employeeArr = [];
+var employeeArr = [];
 function employeeArray(){
-  db.query(`SELECT * FROM employees`, function(err , empresults){
-    console.log(results);
+  db.query(`SELECT * FROM employees`,function(err , empresults){
+    // console.log(empresults);
   if (err) {
     console.log(err);
   }
   for(let i = 0; i < empresults.length; i++ ){
-    let empl = {
-      name:empresults[i].first_name + " " + empresults[i].last_name,
-      value:empresults[i].id
+    // let empl = empresults[i].first_name + " " + empresults[i].last_name
+    var data = {
+      name: empresults[i].first_name + " " + empresults[i].last_name,
+      value: empresults[i].id
     }
-
-    employeeArr.push(empl)
+    employeeArr.push(data);
   }
-  return employeeArr;
-});
-// console.log(employeeArr);
+})
+// return employeeArr;
 };
-
+employeeArray();
+// var newEmployee = employeeArray();
+// console.log(newEmployee);
 
 //Function to update employee's manager
 //function to Delete a department
 const deleteDepartment = () => {
-  const department = [];
-  db.query (`SELECT * FROM DEPARTMENT`, (error , results) => {
-    if (error) throw err;
-    results.forEach(dept => {
-      let departments = {
-        name: dept.name,
-        value:dept.id
+  const departmentChoices = [];
+  db.query (`SELECT * FROM department`, (error , results) => {
+
+    results.forEach(dep => {
+      let departmentC = {
+        name: dep.name,
+        value: dep.id
       }
-      department.push(departments);
-    });
+      departmentChoices.push(departmentC);
+    })
     inquirer.prompt([
     {
       type: 'list',
       name: 'id',
-      choices: department,
+      choices: departmentChoices,
       message: "Which department do you want to delete?"
     }
 
     ]).then (answers => {
 
-     db.query( `DELETE FROM DEPARTMENT WHERE ID = ?`[answers.id],function (err , results){
+     db.query( `DELETE FROM department WHERE id = ?`,[answers.id],function (err , results){
 
       if (err) {
         console.log(error);
@@ -430,7 +424,7 @@ const deleteDepartment = () => {
 //Function to Delete a role
 const deleteRole = () => {
   const removeRole = [];
-  db.query (`SELECT * FROM ROLE`,(error , results) => {
+  db.query (`SELECT * FROM roles`,(error , results) => {
     if (error) throw err;
     results.forEach(dRole => {
       let rRole = {
@@ -448,7 +442,7 @@ const deleteRole = () => {
 
     ]).then (answers => {
 
-      db.query(`DELETE FROM ROLE WHERE ID = ?`[answers.id],function(err,results){
+      db.query(`DELETE FROM role WHERE id = ?`[answers.id],function(err,results){
 
         if (err) throw err;
         console.log(`${answers.affected} rows successfully deleted!`);
@@ -462,25 +456,24 @@ const deleteRole = () => {
 //Function to Delete an employee
 const deleteEmployee = () => {
   const removeEmployee = [];
-  db.query (`SELECT * FROM EMPLOYEES`,(error , results) => {
+  db.query (`SELECT * FROM employees`,(error , results) => {
     if (error) throw err;
     results.forEach(({ first_name, last_name, id}) => {
       removeEmployee.push({
         name: first_name + "" + last_name,
         value: id
     });
-
   });
     inquirer.prompt([
       {
         type: 'list',
         name: 'id',
-        choices: "Which employee do you wnat to delete?"
+        choices: "Which employee do you want to delete?"
       }
 
     ]).then (answers => {
 
-      db.query(`DELETE FROM ROLE WHERE ID = ?`[answers.id],function(err,results){
+      db.query(`DELETE FROM employees WHERE id = ?`[answers.id],function(err,results){
 
         if (err) throw err;
         console.log(`${answers.affected} rows successfully deleted!`);
