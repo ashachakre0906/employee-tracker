@@ -3,7 +3,10 @@ Challenge is to build a command-line application from scratch to manage a compan
 
 ## [Solution URL](https://github.com/ashachakre0906/employee-tracker)
 
-## Application DEMO ![Live gif](images/employeeTracker.gif)
+## Application DEMO
+
+[Live gif](images/employeeTracker.gif)
+
 [Screencastify link](https://watch.screencastify.com/v/ghrKO2GLVk2NqIsLT3e4)
 
 ## User Story
@@ -76,7 +79,7 @@ function viewEmployees() {
 
 * Refer to the documentation:
 
-[npm documentation on MySQL2](https://www.npmjs.com/package/mysql2#installation
+[npm documentation on MySQL2](https://www.npmjs.com/package/mysql2#installation)
 
 ## License
 This project is license under [MIT](https://choosealicense.com/licenses/mit/)
