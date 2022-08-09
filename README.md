@@ -1,5 +1,11 @@
 # employee-tracker
-Challenge is to build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.We need to use the MySQL2 package to connect to the MySQL database and perform queries, the Inquirer package to interact with the user via the command line, and the console.table package to print MySQL rows to the console.
+Challenge is to build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.These interfaces are called content management systems (CMS) which allows non-developers to easily view and interact with information stored in databases.
+
+## [Solution URL](https://github.com/ashachakre0906/employee-tracker)
+
+## Application DEMO ![Live gif]()
+[Screencastify link]()
+
 ## User Story
 ```
 AS A business owner
@@ -26,10 +32,35 @@ THEN I am prompted to enter the employee’s first name, last name, role, and ma
 WHEN I choose to update an employee role
 THEN I am prompted to select an employee to update and their new role and this information is updated in the database
 ```
+### Code Examples & Screenshots
+
 ### Required Dependencies
 
-Uses the Inquirer package 
+* Uses the Inquirer package 
+ - `npm install --save inquirer`
 
-Uses the MySQL2 package which connects to a MySQL database.
+* Uses the MySQL2 package which connects to a MySQL database.
+- `npm install --save mysql2`
 
-Uses the console.table package which prints MySQL rows to the console
+* Uses the console.table package which prints MySQL rows to the console
+- `npm install console-table`
+
+* `node index.js` command required to invoke the application from the command line.
+
+
+## License
+This project is license under [MIT](https://choosealicense.com/licenses/mit/)
+## Technologies Used
+
+![Javascript Badge](https://img.shields.io/badge/Javascript-blue.svg)
+![Node.js Badge](https://img.shields.io/badge/Node-yellow.svg)
+![Inquirer Badge](https://img.shields.io/badge/Inquirer-orange.svg)
+![MySQL2 Badge](https://img.shields.io/badge/MySQL2-magenta.svg)
+
+## Questions
+if you have any questions please reach out to me:<br>
+Email Address: chourpagar.asha@gmail.com <br>
+Github Repo URL:[GitHub](https://github.com/ashachakre0906)
+
+
+

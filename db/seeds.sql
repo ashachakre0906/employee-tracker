@@ -46,7 +46,6 @@ INSERT INTO employees (first_name,last_name,role_id,manager_id)
 
 
 
---SET GLOBAL FOREIGN_KEY_CHECKS=1
 
        
        

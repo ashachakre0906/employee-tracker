@@ -47,7 +47,6 @@ function init() {
         "Delete a Department",
         "Delete a Role",
         "Delete an Employee",
-        "Quit",
       ],
     })
     .then((answer) => {
