@@ -3,8 +3,8 @@ Challenge is to build a command-line application from scratch to manage a compan
 
 ## [Solution URL](https://github.com/ashachakre0906/employee-tracker)
 
-## Application DEMO ![Live gif]()
-[Screencastify link]()
+## Application DEMO ![Live gif](images/employeeTracker.gif)
+[Screencastify link](https://watch.screencastify.com/v/ghrKO2GLVk2NqIsLT3e4)
 
 ## User Story
 ```
@@ -34,6 +34,31 @@ THEN I am prompted to select an employee to update and their new role and this i
 ```
 ### Code Examples & Screenshots
 
+<img src ="images/ASCII.png">
+<img src ="images/ViewRoles.png">
+
+### function to view employees
+```
+function viewEmployees() {
+  db.query(
+    `SELECT employees.id, employees.first_name, employees.last_name, roles.title, department.name AS department, 
+    roles.salary, 
+    CONCAT(manager.first_name, ' ', manager.last_name) AS Manager 
+    FROM employees 
+    LEFT JOIN roles on employees.role_id = roles.id 
+    LEFT JOIN department on roles.department_id = department.id 
+    LEFT JOIN employees manager on manager.id = employees.manager_id;`,
+    function (err, results) {
+      if (err) {
+        console.log(err);
+      }
+      printTable(results);
+      init();
+    }
+  );
+}
+```
+
 ### Required Dependencies
 
 * Uses the Inquirer package 
@@ -44,9 +69,14 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 * Uses the console.table package which prints MySQL rows to the console
 - `npm install console-table`
+* Initialize mysql shell by entering command in your terminal `mysql -u root -p` and execute  `source db/schema.sql` which will create the database.
+* We need to seed the database by executing `source db/seeds.sql`
 
 * `node index.js` command required to invoke the application from the command line.
 
+* Refer to the documentation:
+
+[npm documentation on MySQL2](https://www.npmjs.com/package/mysql2#installation
 
 ## License
 This project is license under [MIT](https://choosealicense.com/licenses/mit/)
@@ -58,7 +88,7 @@ This project is license under [MIT](https://choosealicense.com/licenses/mit/)
 ![MySQL2 Badge](https://img.shields.io/badge/MySQL2-magenta.svg)
 
 ## Questions
-if you have any questions please reach out to me:<br>
+Please reach out to me:<br>
 Email Address: chourpagar.asha@gmail.com <br>
 Github Repo URL:[GitHub](https://github.com/ashachakre0906)
 

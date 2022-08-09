@@ -108,7 +108,7 @@ function viewRoles() {
       if (err) {
         console.log(err);
       }
-      console.table(results);
+      printTable(results);
       init();
     }
   );
@@ -127,7 +127,7 @@ function viewEmployees() {
       if (err) {
         console.log(err);
       }
-      console.table(results);
+      printTable(results);
       init();
     }
   );
