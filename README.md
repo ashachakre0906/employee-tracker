@@ -5,7 +5,8 @@ Challenge is to build a command-line application from scratch to manage a compan
 
 ## Application DEMO
 
-[Live gif](images/employeeTracker.gif)
+https://user-images.githubusercontent.com/101746882/183608403-4edd3817-c2b1-4f2b-8d4c-35688c7706df.mp4
+
 
 [Screencastify link](https://watch.screencastify.com/v/ghrKO2GLVk2NqIsLT3e4)
 
