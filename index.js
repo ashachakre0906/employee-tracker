@@ -1,8 +1,8 @@
-const inquirer = require("inquirer");
-const mysql = require("mysql2");
+const inquirer = require('inquirer');
+const mysql = require('mysql2');
 const { printTable } = require("console-table-printer");
-// const cTable = require("console.table");//display data table in command line
-const figlet = require("figlet"); //This method allows you to create ASCII Art from text.
+const cTable = require('console.table'); //display data table in command line
+const figlet = require('figlet'); //This method allows you to create ASCII Art from text.
 const db = mysql.createConnection(
   {
     host: "localhost",
@@ -47,6 +47,7 @@ function init() {
         "Delete a Department",
         "Delete a Role",
         "Delete an Employee",
+        "Quit",
       ],
     })
     .then((answer) => {
@@ -81,36 +82,26 @@ function init() {
           break;
         case "Delete an Employee":
           deleteEmployee();
-
-        // default:
-        //   quit ();
-        //   console.log("=================================");
-        //   console.log("");
-        //   console.log("Thank you for using Employee Tracker Database");
-        //   console.log("");
-        //   console.log("=================================");
+          break;
+        default:
+          db.end();
       }
     })
     .catch((err) => {
       console.error(err);
     });
 }
-//quit function
-
-function quit() {
-  db.end();
-  process.exit();
-}
-
+//function to view departments
 function viewDepartments() {
   db.query(`SELECT * FROM department`, function (err, results) {
     if (err) {
       console.log(err);
     }
-    printTable(results);
+    console.table(results);
     init();
   });
 }
+//function to view roles
 function viewRoles() {
   db.query(
     `SELECT roles.id, roles.title AS title, department.name AS department,roles.salary FROM roles INNER JOIN department ON roles.department_id = department.id;`,
@@ -118,12 +109,12 @@ function viewRoles() {
       if (err) {
         console.log(err);
       }
-      printTable(results);
+      console.table(results);
       init();
     }
   );
 }
-
+//function to view employees
 function viewEmployees() {
   db.query(
     `SELECT employees.id, employees.first_name, employees.last_name, roles.title, department.name AS department, 
@@ -137,47 +128,37 @@ function viewEmployees() {
       if (err) {
         console.log(err);
       }
-      printTable(results);
+      console.table(results);
       init();
     }
   );
 }
-
+//function to add department
 function addDepartment() {
   inquirer
     .prompt([
       {
-        type: "list",
-        name: "options",
-        message: "What department would you like to add ?",
-        choices: [
-          "Engineering",
-          "Quality Assurance",
-          "Design",
-          "HR",
-          "Sales",
-          "Finance",
-          "Admin",
-        ],
+        type: "input",
+        name: "newDepartment",
+        message: "What is the new department name ?",
       },
     ])
     .then((answer) => {
       db.query(
-        `INSERT INTO department SET ?`,
-        {
-          name: answer.options,
-        },
+        `INSERT INTO department (name) VALUES (?)`,
+        [answer.newDepartment],
         function (err, results) {
           if (err) {
             console.log(err);
           }
-          printTable(results);
-          console.log(`Added ${answer.options} to the database`);
+          console.table(results);
+          console.log(`Added ${answer.newDepartment} to the database`);
           init();
         }
       );
     });
 }
+//Function to add role.
 function addRole() {
   const departmentArray = [];
   db.query(
@@ -193,7 +174,7 @@ function addRole() {
         };
         departmentArray.push(department);
       });
-      console.log(departmentArray);
+      console.table(departmentArray);
       role();
     }
   );
@@ -212,21 +193,20 @@ function addRole() {
         },
         {
           type: "list",
-          name: "department_id",
+          name: "departmentArrayList",
           message: "Which department does the role belongs to ?",
           choices: departmentArray,
         },
       ])
       .then((answer) => {
-        console.log(answer.department_id);
         db.query(
           `INSERT INTO employee_db.roles (title ,salary,department_id) VALUES (? , ? , ?)`,
-          [answer.title, answer.salary, answer.department_id],
+          [answer.title, answer.salary, answer.departmentArrayList],
           function (err, results) {
             if (err) {
               console.log(err);
             }
-            printTable(results);
+            console.table(results);
             console.log(
               `New Role ${answer.title} is successfully added to the database`
             );
@@ -279,7 +259,7 @@ function addEmployee() {
           if (err) {
             console.log(err);
           }
-          printTable(results);
+          console.table(results);
           console.log(
             `Successfully added new employee ${answers.first_name} ${answers.last_name} to the database`
           );
@@ -327,7 +307,7 @@ function selectManager() {
   return managerArray;
 }
 
-//function to update an employee
+//function to update an employee role
 
 function updateEmployeeRole() {
   inquirer
@@ -355,16 +335,9 @@ function updateEmployeeRole() {
           if (err) {
             console.log(err);
           }
-          console.log(results);
-          console.log("Updated employees role to the database");
+          // console.table(results);
+          console.log("Succcessfully updated employee role to the database");
           init();
-          db.query(`SELECT * FROM employees`, (err, results) => {
-            if (err) {
-              console.log(err);
-            }
-            printTable(results);
-            init();
-          });
         }
       );
     });
@@ -415,9 +388,8 @@ const deleteDepartment = () => {
           function (err, results) {
             if (err) {
               console.log(error);
-              init();
             }
-            printTable(results);
+            console.log(`Department is successfully deleted!`);
             init();
           }
         );
@@ -451,9 +423,12 @@ const deleteRole = () => {
           function (err, results) {
             if (err) {
               console.log(error);
-              init();
             }
-          });
+            console.log(results);
+            console.log(`role is successfully deleted!`);
+            init();
+          }
+        );
       });
   });
 };
@@ -481,13 +456,15 @@ const deleteEmployee = () => {
         db.query(
           `DELETE FROM employees WHERE id = ?`,
           [answers.id],
-          function (err, results) {
+          function (err, answers) {
             if (err) throw err;
-            console.log(`Successfully deleted!`);
-            init();
-          });
+          }
+        );
+        console.log(`Employee is successfully deleted!`);
+        init();
       });
   });
 };
 
 //Function to View the total utilized budget of a department
+//still working on this function
